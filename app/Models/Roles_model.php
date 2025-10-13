@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Models;
+
+class Roles_model extends Crud_model {
+
+    protected $table = null;
+
+    function __construct() {
+        $this->table = 'roles';
+        parent::__construct($this->table);
+    }
+
+    function get_details($options = array()) {
+        $roles_table = $this->db->prefixTable('roles');
+
+        $where = "";
+        $id = $this->_get_clean_value($options, "id");
+        if ($id) {
+            $where = " AND $roles_table.id=$id";
+        }
+
+        $sql = "SELECT $roles_table.*
+        FROM $roles_table
+        WHERE $roles_table.deleted=0 $where";
+        return $this->db->query($sql);
+    }
+
+    function get_all_roles() {
+        $roles_table = $this->db->prefixTable('roles');
+    
+        $sql = "SELECT $roles_table.*
+                FROM $roles_table
+                WHERE $roles_table.deleted = 0";
+    
+        // Ejecutar la consulta y devolver el resultado como un array de objetos
+        return $this->db->query($sql)->getResult();
+    }
+
+    
+
+
+}

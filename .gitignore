@@ -1,0 +1,22 @@
+# Ignorar archivos y carpetas comunes
+node_modules/
+vendor/
+.env
+*.log
+*.tmp
+*.bak
+.DS_Store
+
+# Ignorar la carpeta writable
+writable/
+vendor/
+app/config/Database.php
+# Ignorar archivos de error específicos
+php_errorlog
+# Ignorar carpeta de archivos de usuario
+files/
+
+# Ignorar credenciales y archivos sensibles
+app/Config/firebase-service-account.json
+*.json
+!composer.json

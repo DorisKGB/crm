@@ -1,0 +1,556 @@
+/* ──────────────────────────────
+   ESTRUCTURA GENERAL
+──────────────────────────────── */
+#page-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.vsee-replic-container {
+  flex: 1;
+  display: flex;
+  height: calc(100vh - 60px); /* ajusta según header si lo tienes */
+  overflow: hidden;
+}
+
+/* ──────────────────────────────
+   VENTANA PRINCIPAL
+──────────────────────────────── */
+.vsee-replic-window-frame {
+  background: #dcdfe4;
+  border-bottom: 1px solid #c4c4c4;
+  display: flex;
+  align-items: center;
+  height: 35px;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.vsee-replic-titlebar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.vsee-replic-logo img {
+  height: 20px;
+}
+
+.vsee-replic-title {
+  flex: 1;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.vsee-replic-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.vsee-replic-btn {
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  border-radius: 3px;
+}
+
+.vsee-replic-btn:hover {
+  background: #ccc;
+}
+
+.vsee-replic-close:hover {
+  background: #e57373;
+  color: white;
+}
+
+/* ──────────────────────────────
+   SIDEBAR
+──────────────────────────────── */
+.vsee-replic-sidebar {
+  width: 60px;
+  background-color: #2c2c2c;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 10px;
+}
+
+.vsee-replic-sidebar-top {
+  padding: 20px 0;
+}
+
+.vsee-replic-user-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.vsee-replic-user-icon {
+  background: #5bbec3;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  color: white;
+}
+
+.vsee-replic-status-badge {
+  position: absolute;
+  bottom: 0;
+  right: -2px;
+  background-color: #4caf50;
+  border: 2px solid #2c2c2c;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.vsee-replic-menu-icon {
+  width: 100%;
+  text-align: center;
+  padding: 12px 0;
+  cursor: pointer;
+  font-size: 16px;
+  color: #aaa;
+  transition: background 0.2s, color 0.2s;
+}
+
+.vsee-replic-menu-icon:hover {
+  background-color: #3b3b3b;
+  color: white;
+}
+
+/* ──────────────────────────────
+   LISTA DE CHATS
+──────────────────────────────── */
+.vsee-replic-chatlist {
+  width: 300px;
+  background: white;
+  border-right: 1px solid #ddd;
+  min-height: 100%;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.vsee-replic-chatlist-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 15px 5px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 2;
+}
+
+.vsee-replic-header-icon {
+  font-size: 16px;
+  color: #4caf50;
+  cursor: pointer;
+}
+
+.vsee-replic-chatlist-title {
+  font-weight: bold;
+  font-size: 15px;
+  color: #222;
+}
+
+.vsee-replic-search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff !important;
+  margin: 5px 15px 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
+  position: sticky;
+  top: 45px; /* ajusta según el alto del header */
+  z-index: 5;
+  gap: 8px;
+}
+
+.vsee-replic-search-icon {
+  color: #999;
+  font-size: 13px;
+  margin-right: 8px;
+}
+
+.vsee-replic-search-bar input {
+  border: none;
+  outline: none;
+  padding: 8px 12px;
+  background: #f9f9f9;
+  width: 100%;
+  font-size: 13px;
+  color: #333;
+}
+
+.vsee-replic-search-bar:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vsee-replic-chat-item {
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  position: relative;
+  cursor: pointer;
+}
+.vsee-replic-chat-item:hover {
+  background-color: #f4f4f4 !important;
+}
+
+.vsee-replic-selected {
+  background: #f0f0f0;
+}
+
+.vsee-replic-status {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.vsee-replic-online {
+  background: green;
+}
+
+.vsee-replic-chat-info {
+  font-size: 13px;
+  flex: 1;
+}
+
+.vsee-replic-notif-badge {
+  position: absolute;
+  top: 12px;
+  right: 10px;
+  background: red;
+  color: white;
+  padding: 3px 6px;
+  font-size: 11px;
+  border-radius: 10px;
+}
+
+.vsee-replic-smallChat {
+  font-size: 10px;
+}
+
+/* ──────────────────────────────
+   PANEL DE CONVERSACIÓN
+──────────────────────────────── */
+.vsee-replic-chatpanel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-height: 100%;
+  flex: 1;
+}
+
+.vsee-replic-chat-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  background-color: #fff;
+}
+
+.vsee-replic-chat-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.vsee-replic-status-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #34a853;
+  border-radius: 50%;
+}
+
+.vsee-replic-chat-user small {
+  color: #888;
+  font-size: 12px;
+}
+
+.vsee-replic-chat-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.vsee-replic-icon {
+  color: #34a853;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.vsee-replic-icon:hover {
+  color: #2a8641;
+}
+
+/* ──────────────────────────────
+   MENSAJES
+──────────────────────────────── */
+.vsee-replic-messages {
+  overflow-y: auto;
+  padding: 15px;
+  min-height: 85%;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  position: relative;
+}
+
+#chat-messages-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column !important;
+  position: relative;
+}
+
+.vsee-replic-date {
+  text-align: center;
+  color: #888;
+  font-size: 12px;
+  margin: 10px 0;
+}
+
+.vsee-replic-msg {
+  max-width: 75%;
+  padding: 10px 15px;
+  border-radius: 18px;
+  margin: 8px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  position: relative;
+  word-break: break-word;
+
+  animation: fadeInUp 0.3s ease;
+  border-radius: 18px 18px 18px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.chat-avatar-circle {
+  background: #5e72e4;
+  color: #fff;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.vsee-replic-recv {
+  background-color: #e6e7ec;
+  color: #000;
+  align-self: flex-start;
+}
+
+.vsee-replic-sent {
+  background-color: #86b65b;
+  color: white;
+  align-self: flex-end;
+  border-radius: 18px 18px 0 18px;
+}
+
+.vsee-replic-time {
+  display: block;
+  font-size: 10px;
+  color: #666;
+  margin-top: 5px;
+  text-align: right;
+}
+
+/* ──────────────────────────────
+   INPUT DE MENSAJES
+──────────────────────────────── */
+.vsee-replic-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  border-top: 1px solid #ccc;
+  background-color: #ffffff;
+  z-index: 1;
+}
+
+.vsee-replic-input input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 13px;
+}
+
+.vsee-replic-input-icon {
+  font-size: 22px;
+  color: #4caf50;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.vsee-replic-input-icon:hover {
+  transform: scale(1.2);
+}
+/* ──────────────────────────────
+   CONTENIDO ENGLOBADO
+──────────────────────────────── */
+.vsee-replic-content {
+  display: flex;
+  flex: 1;
+  height: 95%;
+  overflow: hidden;
+}
+
+/* ──────────────────────────────
+   SECCION CONTACTOS
+──────────────────────────────── */
+
+.vsee-replic-contacts {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: #f7f7f7;
+  height: 100%;
+  overflow: hidden;
+}
+
+.vsee-replic-contacts-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  background: white;
+}
+
+.vsee-replic-contacts-search {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 13px;
+  outline: none;
+}
+
+.vsee-replic-contacts-add {
+  color: #4caf50;
+  font-size: 18px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.vsee-replic-contacts-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
+  background: linear-gradient(to bottom, #ffffff, #f5f5f5);
+}
+
+.vsee-replic-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+.vsee-replic-contact-item:hover {
+  background-color: #eaeaea;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.green {
+  background-color: #34a853;
+}
+
+.status-dot.gray {
+  background-color: #999;
+}
+
+.status-dot.orange {
+  background-color: orange;
+}
+
+.vsee-replic-chat-item.vsee-replic-active {
+  background-color: #f2f2f2;
+  border-left: 4px solid #018d32;
+  box-shadow: inset 2px 0 0 #a1a1a2;
+}
+
+/*LOADER MODERNO*/
+
+.floating-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+}
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 32px;
+  height: 32px;
+  margin: 4px;
+  border-radius: 50%;
+  border: 4px solid #5e72e4;
+  border-color: #5e72e4 transparent #06710f transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

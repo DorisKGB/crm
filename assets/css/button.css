@@ -1,0 +1,923 @@
+/* -----------------------------------------------------------
+ * BOTONES ESTILO “TIMBRAR” – VARIANTES COLORES BOOTSTRAP
+ * ----------------------------------------------------------*/
+
+/* Paleta de colores propia (evita conflictos con Bootstrap) */
+:root {
+  --btn-primary-start: #0d6efd;
+  --btn-primary-end: #6610f2;
+  --btn-secondary-start: #6c757d;
+  --btn-secondary-end: #343a40;
+  --btn-success-start: #198754;
+  --btn-success-end: #28a745;
+  --btn-danger-start: #dc3545;
+  --btn-danger-end: #b02a37;
+  --btn-warning-start: #ffc107;
+  --btn-warning-end: #ff8800;
+  --btn-info-start: #0dcaf0;
+  --btn-info-end: #17a2b8;
+  --btn-light-start: #f8f9fa;
+  --btn-light-end: #e2e6ea;
+  --btn-dark-start: #212529;
+  --btn-dark-end: #000000;
+
+  /* Nuevos degradados */
+  --btn-lime-start: #32cd32;
+  --btn-lime-end: #07a10b; /* verde claro */
+  --btn-purple-start: #6f42c1;
+  --btn-purple-end: #4b2992; /* morado      */
+  --btn-rose-start: #ff4d79;
+  --btn-rose-end: #c61a4c; /* rosado      */
+  --btn-cyan-start: #17e0e0;
+  --btn-cyan-end: #089fa0;
+  --btn-teal-start: #20c997;
+  --btn-teal-end: #138f6e;
+  --btn-orange-start: #fd7e14;
+  --btn-orange-end: #d46000;
+  --btn-amber-start: #ffbf00;
+  --btn-amber-end: #d79b00;
+  --btn-brown-start: #8d6e63;
+  --btn-brown-end: #5d4037;
+  --btn-slate-start: #6c7a89;
+  --btn-slate-end: #49545f;
+  --btn-indigo-start: #6610f2;
+  --btn-indigo-end: #4709ad;
+  --btn-olive-start: #708238;
+  --btn-olive-end: #556227;
+  --btn-gold-start: #d4af37;
+  --btn-gold-end: #a8861d;
+  --btn-coral-start: #ff7f50;
+  --btn-coral-end: #d75a2d;
+}
+
+/* ----------------- ESTILO BASE (idéntico al original) -----------------*/
+.btn-button {
+  background: linear-gradient(
+    135deg,
+    #4c51af,
+    #2e07bb
+  ); /* se sobrescribe en variantes */
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 40px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* espacio ícono‑texto */
+}
+
+.btn-button i {
+  margin-right: 8px;
+}
+
+/* Destello diagonal */
+.btn-button::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+  z-index: 0;
+}
+.btn-button:hover::before {
+  top: 100%;
+  left: 100%;
+}
+
+/* Hover general */
+.btn-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(128, 0, 0, 0.4);
+}
+
+/* ----------------- VARIANTES SÓLIDAS -----------------*/
+.btn-button-primary {
+  background: linear-gradient(
+    135deg,
+    var(--btn-primary-start),
+    var(--btn-primary-end)
+  );
+}
+.btn-button-secondary {
+  background: linear-gradient(
+    135deg,
+    var(--btn-secondary-start),
+    var(--btn-secondary-end)
+  );
+}
+.btn-button-success {
+  background: linear-gradient(
+    135deg,
+    var(--btn-success-start),
+    var(--btn-success-end)
+  );
+}
+.btn-button-danger {
+  background: linear-gradient(
+    135deg,
+    var(--btn-danger-start),
+    var(--btn-danger-end)
+  );
+}
+.btn-button-warning {
+  background: linear-gradient(
+    135deg,
+    var(--btn-warning-start),
+    var(--btn-warning-end)
+  );
+  color: #212529;
+}
+.btn-button-info {
+  background: linear-gradient(
+    135deg,
+    var(--btn-info-start),
+    var(--btn-info-end)
+  );
+  color: #ffffff !important;
+}
+.btn-button-light {
+  background: linear-gradient(
+    135deg,
+    var(--btn-light-start),
+    var(--btn-light-end)
+  );
+  color: #212529;
+}
+.btn-button-dark {
+  background: linear-gradient(
+    135deg,
+    var(--btn-dark-start),
+    var(--btn-dark-end)
+  );
+}
+
+.btn-button-lime {
+  background: linear-gradient(
+    135deg,
+    var(--btn-lime-start),
+    var(--btn-lime-end)
+  );
+}
+.btn-button-purple {
+  background: linear-gradient(
+    135deg,
+    var(--btn-purple-start),
+    var(--btn-purple-end)
+  );
+}
+.btn-button-rose {
+  background: linear-gradient(
+    135deg,
+    var(--btn-rose-start),
+    var(--btn-rose-end)
+  );
+}
+.btn-button-cyan {
+  background: linear-gradient(
+    135deg,
+    var(--btn-cyan-start),
+    var(--btn-cyan-end)
+  );
+}
+.btn-button-teal {
+  background: linear-gradient(
+    135deg,
+    var(--btn-teal-start),
+    var(--btn-teal-end)
+  );
+}
+.btn-button-orange {
+  background: linear-gradient(
+    135deg,
+    var(--btn-orange-start),
+    var(--btn-orange-end)
+  );
+}
+.btn-button-amber {
+  background: linear-gradient(
+    135deg,
+    var(--btn-amber-start),
+    var(--btn-amber-end)
+  );
+  color: #212529;
+}
+.btn-button-brown {
+  background: linear-gradient(
+    135deg,
+    var(--btn-brown-start),
+    var(--btn-brown-end)
+  );
+}
+.btn-button-slate {
+  background: linear-gradient(
+    135deg,
+    var(--btn-slate-start),
+    var(--btn-slate-end)
+  );
+}
+.btn-button-indigo {
+  background: linear-gradient(
+    135deg,
+    var(--btn-indigo-start),
+    var(--btn-indigo-end)
+  );
+}
+.btn-button-olive {
+  background: linear-gradient(
+    135deg,
+    var(--btn-olive-start),
+    var(--btn-olive-end)
+  );
+}
+.btn-button-gold {
+  background: linear-gradient(
+    135deg,
+    var(--btn-gold-start),
+    var(--btn-gold-end)
+  );
+  color: #212529;
+}
+.btn-button-coral {
+  background: linear-gradient(
+    135deg,
+    var(--btn-coral-start),
+    var(--btn-coral-end)
+  );
+}
+
+/* ----------------- VARIANTES OUTLINE -----------------*/
+.btn-button-outline-primary,
+.btn-button-outline-secondary,
+.btn-button-outline-success,
+.btn-button-outline-danger,
+.btn-button-outline-warning,
+.btn-button-outline-info,
+.btn-button-outline-light,
+.btn-button-outline-dark {
+  background: transparent;
+  color: inherit; /* se hereda más abajo */
+  border: 2px solid currentColor;
+  box-shadow: none;
+}
+
+.btn-button-outline-primary {
+  color: var(--btn-primary-end);
+}
+.btn-button-outline-secondary {
+  color: var(--btn-secondary-end);
+}
+.btn-button-outline-success {
+  color: var(--btn-success-end);
+}
+.btn-button-outline-danger {
+  color: var(--btn-danger-end);
+}
+.btn-button-outline-warning {
+  color: var(--btn-warning-end);
+}
+.btn-button-outline-info {
+  color: var(--btn-info-end);
+}
+.btn-button-outline-light {
+  color: var(--btn-dark-end);
+}
+.btn-button-outline-dark {
+  color: var(--btn-dark-end);
+}
+
+.btn-button-outline-lime {
+  color: var(--btn-lime-end);
+}
+.btn-button-outline-purple {
+  color: var(--btn-purple-end);
+}
+.btn-button-outline-rose {
+  color: var(--btn-rose-end);
+}
+.btn-button-outline-cyan {
+  color: var(--btn-cyan-end);
+}
+.btn-button-outline-teal {
+  color: var(--btn-teal-end);
+}
+.btn-button-outline-orange {
+  color: var(--btn-orange-end);
+}
+.btn-button-outline-amber {
+  color: var(--btn-amber-end);
+}
+.btn-button-outline-brown {
+  color: var(--btn-brown-end);
+}
+.btn-button-outline-slate {
+  color: var(--btn-slate-end);
+}
+.btn-button-outline-indigo {
+  color: var(--btn-indigo-end);
+}
+.btn-button-outline-olive {
+  color: var(--btn-olive-end);
+}
+.btn-button-outline-gold {
+  color: var(--btn-gold-end);
+}
+.btn-button-outline-coral {
+  color: var(--btn-coral-end);
+}
+
+/* Hover → se rellena con el degradado respectivo */
+.btn-button-outline-primary:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-primary-start),
+    var(--btn-primary-end)
+  );
+  color: #fff;
+}
+.btn-button-outline-secondary:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-secondary-start),
+    var(--btn-secondary-end)
+  );
+  color: #fff;
+}
+.btn-button-outline-success:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-success-start),
+    var(--btn-success-end)
+  );
+  color: #fff;
+}
+.btn-button-outline-danger:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-danger-start),
+    var(--btn-danger-end)
+  );
+  color: #fff;
+}
+.btn-button-outline-warning:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-warning-start),
+    var(--btn-warning-end)
+  );
+  color: #212529;
+}
+.btn-button-outline-info:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-info-start),
+    var(--btn-info-end)
+  );
+  color: #212529;
+}
+.btn-button-outline-light:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-light-start),
+    var(--btn-light-end)
+  );
+  color: #212529;
+}
+.btn-button-outline-dark:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-dark-start),
+    var(--btn-dark-end)
+  );
+  color: #fff;
+}
+.btn-button-outline-lime:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-lime-start),
+    var(--btn-lime-end)
+  );
+  color: #fff;
+}
+.btn-button-outline-purple:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-purple-start),
+    var(--btn-purple-end)
+  );
+  color: #fff;
+}
+.btn-button-outline-rose:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-rose-start),
+    var(--btn-rose-end)
+  );
+  color: #fff;
+}
+.btn-button-outline-cyan:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-cyan-start),
+    var(--btn-cyan-end)
+  );
+  color: #212529;
+}
+.btn-button-outline-teal:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-teal-start),
+    var(--btn-teal-end)
+  );
+  color: #fff;
+}
+.btn-button-outline-orange:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-orange-start),
+    var(--btn-orange-end)
+  );
+  color: #212529;
+}
+.btn-button-outline-amber:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-amber-start),
+    var(--btn-amber-end)
+  );
+  color: #212529;
+}
+.btn-button-outline-brown:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-brown-start),
+    var(--btn-brown-end)
+  );
+  color: #fff;
+}
+.btn-button-outline-slate:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-slate-start),
+    var(--btn-slate-end)
+  );
+  color: #fff;
+}
+.btn-button-outline-indigo:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-indigo-start),
+    var(--btn-indigo-end)
+  );
+  color: #fff;
+}
+.btn-button-outline-olive:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-olive-start),
+    var(--btn-olive-end)
+  );
+  color: #fff;
+}
+.btn-button-outline-gold:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-gold-start),
+    var(--btn-gold-end)
+  );
+  color: #212529;
+}
+.btn-button-outline-coral:hover {
+  background: linear-gradient(
+    135deg,
+    var(--btn-coral-start),
+    var(--btn-coral-end)
+  );
+  color: #fff;
+}
+
+/* ========================================
+   SISTEMA DE BOTONES GHOST MÉDICO
+   Estilo sutil profesional con todos los colores Bootstrap
+   ======================================== */
+
+/* Clase base para todos los botones ghost */
+.btn-ghost {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    color: #6b7280;
+    min-height: 38px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    line-height: 1.4;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.btn-ghost:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    text-decoration: none;
+}
+
+.btn-ghost:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.btn-ghost:active {
+    transform: translateY(1px);
+}
+
+.btn-ghost:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ========================================
+   COLORES BOOTSTRAP - VERSIÓN GHOST
+   ======================================== */
+
+/* PRIMARY - Azul */
+.btn-ghost-primary {
+    color: #0d6efd;
+}
+.btn-ghost-primary:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #0d6efd;
+}
+
+/* SECONDARY - Gris */
+.btn-ghost-secondary {
+    color: #6c757d;
+}
+.btn-ghost-secondary:hover {
+    background: #f8f9fa;
+    border-color: #d3d3d4;
+    color: #6c757d;
+}
+
+/* SUCCESS - Verde */
+.btn-ghost-success {
+    color: #198754;
+}
+.btn-ghost-success:hover {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #198754;
+}
+
+/* DANGER - Rojo */
+.btn-ghost-danger {
+    color: #dc3545;
+}
+.btn-ghost-danger:hover {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #dc3545;
+}
+
+/* WARNING - Amarillo */
+.btn-ghost-warning {
+    color: #fd7e14;
+}
+.btn-ghost-warning:hover {
+    background: #fffbeb;
+    border-color: #fed7aa;
+    color: #fd7e14;
+}
+
+/* INFO - Cian */
+.btn-ghost-info {
+    color: #0dcaf0;
+}
+.btn-ghost-info:hover {
+    background: #f0fdff;
+    border-color: #a5f3fc;
+    color: #0dcaf0;
+}
+
+/* LIGHT - Gris claro */
+.btn-ghost-light {
+    color: #495057;
+    border-color: #dee2e6;
+}
+.btn-ghost-light:hover {
+    background: #f8f9fa;
+    border-color: #ced4da;
+    color: #495057;
+}
+
+/* DARK - Negro */
+.btn-ghost-dark {
+    color: #212529;
+}
+.btn-ghost-dark:hover {
+    background: #f8f9fa;
+    border-color: #ced4da;
+    color: #212529;
+}
+
+/* ========================================
+   COLORES MÉDICOS PERSONALIZADOS
+   ======================================== */
+
+/* MEDICAL RED - Para urgencias */
+.btn-ghost-medical-red {
+    color: #dc2626;
+}
+.btn-ghost-medical-red:hover {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #dc2626;
+}
+
+/* MEDICAL ORANGE - Para alertas */
+.btn-ghost-medical-orange {
+    color: #f59e0b;
+}
+.btn-ghost-medical-orange:hover {
+    background: #fffbeb;
+    border-color: #fed7aa;
+    color: #f59e0b;
+}
+
+/* MEDICAL GREEN - Para confirmaciones */
+.btn-ghost-medical-green {
+    color: #059669;
+}
+.btn-ghost-medical-green:hover {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #059669;
+}
+
+/* MEDICAL BLUE - Para información */
+.btn-ghost-medical-blue {
+    color: #2563eb;
+}
+.btn-ghost-medical-blue:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #2563eb;
+}
+
+/* ========================================
+   TAMAÑOS DE BOTONES
+   ======================================== */
+
+/* Tamaño pequeño */
+.btn-ghost-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-height: 30px;
+}
+
+/* Tamaño normal (ya definido en .btn-ghost) */
+
+/* Tamaño grande */
+.btn-ghost-lg {
+    padding: 12px 24px;
+    font-size: 16px;
+    min-height: 44px;
+}
+
+/* Tamaño extra grande */
+.btn-ghost-xl {
+    padding: 16px 32px;
+    font-size: 18px;
+    min-height: 52px;
+}
+
+/* ========================================
+   VARIANTES ESPECIALES
+   ======================================== */
+
+/* Botón fantasma con borde redondeado completo */
+.btn-ghost-pill {
+    border-radius: 50px;
+}
+
+/* Botón fantasma cuadrado */
+.btn-ghost-square {
+    border-radius: 4px;
+}
+
+/* Botón fantasma sin bordes */
+.btn-ghost-borderless {
+    border: none;
+    padding: 10px 18px;
+}
+
+.btn-ghost-borderless:hover {
+    border: none;
+    box-shadow: none;
+}
+
+/* Botón fantasma de ancho completo */
+.btn-ghost-block {
+    width: 100%;
+    justify-content: center;
+}
+
+/* ========================================
+   ESTADOS ESPECIALES
+   ======================================== */
+
+/* Estado activo */
+.btn-ghost.active,
+.btn-ghost:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Estado de carga */
+.btn-ghost.loading {
+    color: transparent;
+    pointer-events: none;
+    position: relative;
+}
+
+.btn-ghost.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #e5e7eb;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: btn-loading-spin 1s linear infinite;
+}
+
+@keyframes btn-loading-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ========================================
+   ICONOS EN BOTONES
+   ======================================== */
+
+.btn-ghost .icon {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+.btn-ghost-sm .icon {
+    width: 12px;
+    height: 12px;
+}
+
+.btn-ghost-lg .icon {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-ghost-xl .icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* Icono solo (sin texto) */
+.btn-ghost-icon-only {
+    width: 38px;
+    padding: 10px;
+    justify-content: center;
+}
+
+.btn-ghost-icon-only.btn-ghost-sm {
+    width: 30px;
+    padding: 6px;
+}
+
+.btn-ghost-icon-only.btn-ghost-lg {
+    width: 44px;
+    padding: 12px;
+}
+
+/* ========================================
+   BADGES Y INDICADORES
+   ======================================== */
+
+.btn-ghost .badge {
+    background: #ef4444;
+    color: white;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 4px;
+    line-height: 1;
+}
+
+.btn-ghost .dot-indicator {
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    margin-left: 4px;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .btn-ghost-responsive {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 8px;
+    }
+    
+    .btn-ghost-responsive:last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* ========================================
+   GRUPOS DE BOTONES
+   ======================================== */
+
+.btn-ghost-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-ghost-group .btn-ghost {
+    flex: 1;
+    min-width: 0;
+}
+
+.btn-ghost-group-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.btn-ghost-group-vertical .btn-ghost {
+    width: 100%;
+}
+
+/* ========================================
+   UTILIDADES ADICIONALES
+   ======================================== */
+
+/* Texto en mayúsculas */
+.btn-ghost-uppercase {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Texto en negrita */
+.btn-ghost-bold {
+    font-weight: 600;
+}
+
+/* Sin sombra */
+.btn-ghost-no-shadow:hover {
+    box-shadow: none;
+}
+
+/* Transición lenta */
+.btn-ghost-slow {
+    transition: all 0.4s ease;
+}
+
+/* Sin efectos hover */
+.btn-ghost-static:hover {
+    background: white;
+    border-color: #e5e7eb;
+    box-shadow: none;
+    transform: none;
+}

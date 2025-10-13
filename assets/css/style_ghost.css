@@ -1,0 +1,1252 @@
+/* ========================================
+   SISTEMA DE COMPONENTES GHOST MÉDICO
+   Complemento al sistema de botones existente
+   ======================================== */
+/* ========================================
+   INPUTS Y FORMULARIOS
+   ======================================== */
+
+/* Input base ghost */
+.input-ghost {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px;
+    /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;*/
+    background: white;
+    color: #374151;
+    transition: all 0.2s ease;
+    outline: none;
+    width: 100%;
+    min-height: 38px;
+    box-sizing: border-box;
+}
+
+.input-ghost:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+.input-ghost:hover:not(:focus) {
+    border-color: #d1d5db;
+}
+
+.input-ghost::placeholder {
+    color: #9ca3af;
+}
+
+.input-ghost:disabled {
+    background: #f9fafb;
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Input variantes de color */
+.input-ghost-success {
+    border-color: #198754;
+}
+.input-ghost-success:focus {
+    box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.1);
+}
+
+.input-ghost-danger {
+    border-color: #dc3545;
+}
+.input-ghost-danger:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.input-ghost-warning {
+    border-color: #fd7e14;
+}
+.input-ghost-warning:focus {
+    box-shadow: 0 0 0 3px rgba(253, 126, 20, 0.1);
+}
+
+/* Tamaños de input */
+.input-ghost-sm {
+    padding: 6px 10px;
+    font-size: 12px;
+    min-height: 30px;
+}
+
+.input-ghost-lg {
+    padding: 12px 16px;
+    font-size: 16px;
+    min-height: 44px;
+}
+
+/* Input con icono */
+.input-ghost-icon-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.input-ghost-with-icon {
+    padding-left: 36px;
+}
+
+.input-ghost-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+/* ========================================
+   BADGES Y ETIQUETAS
+   ======================================== */
+
+/* Badge base ghost */
+.badge-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+    background: white;
+    color: #6b7280;
+    /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;*/
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+/* Badge colores Bootstrap */
+.badge-ghost-primary {
+    color: #0d6efd;
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+.badge-ghost-secondary {
+    color: #6c757d;
+    background: #f8f9fa;
+    border-color: #d3d3d4;
+}
+
+.badge-ghost-success {
+    color: #198754;
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.badge-ghost-danger {
+    color: #dc3545;
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.badge-ghost-warning {
+    color: #fd7e14;
+    background: #fffbeb;
+    border-color: #fed7aa;
+}
+
+.badge-ghost-info {
+    color: #0dcaf0;
+    background: #f0fdff;
+    border-color: #a5f3fc;
+}
+
+.badge-ghost-dark {
+    color: #212529;
+    background: #f8f9fa;
+    border-color: #ced4da;
+}
+
+/* Badge médicos */
+.badge-ghost-medical-red {
+    color: #dc2626;
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.badge-ghost-medical-green {
+    color: #059669;
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+.badge-ghost-medical-blue {
+    color: #2563eb;
+    background: #eff6ff;
+    border-color: #bfdbfe;
+}
+
+.badge-ghost-medical-orange {
+    color: #f59e0b;
+    background: #fffbeb;
+    border-color: #fed7aa;
+}
+
+/* Badge tamaños */
+.badge-ghost-sm {
+    padding: 2px 6px;
+    font-size: 10px;
+}
+
+.badge-ghost-lg {
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+/* Badge con punto indicador */
+.badge-ghost-dot::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    margin-right: 4px;
+}
+
+/* Badge redondeado */
+.badge-ghost-pill {
+    border-radius: 50px;
+}
+
+/* ========================================
+   CARDS Y CONTENEDORES
+   ======================================== */
+
+/* Card base ghost */
+.card-ghost {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;*/
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.card-ghost:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card-ghost-header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.card-ghost-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.card-ghost-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 4px 0 0 0;
+}
+
+.card-ghost-body {
+    color: #374151;
+    line-height: 1.5;
+}
+
+.card-ghost-footer {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #f3f4f6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Card tamaños */
+.card-ghost-sm {
+    padding: 12px;
+}
+
+.card-ghost-lg {
+    padding: 32px;
+}
+
+/* Card variantes */
+.card-ghost-flat {
+    box-shadow: none;
+}
+
+.card-ghost-flat:hover {
+    box-shadow: none;
+}
+
+.card-ghost-elevated {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-ghost-elevated:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ========================================
+   ALERTS Y NOTIFICACIONES
+   ======================================== */
+
+/* Alert base ghost */
+.alert-ghost {
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: white;
+    color: #374151;
+    /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;*/
+    font-size: 14px;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.alert-ghost-primary {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1e40af;
+}
+
+.alert-ghost-success {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
+}
+
+.alert-ghost-danger {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #b91c1c;
+}
+
+.alert-ghost-warning {
+    background: #fffbeb;
+    border-color: #fed7aa;
+    color: #d97706;
+}
+
+.alert-ghost-info {
+    background: #f0fdff;
+    border-color: #a5f3fc;
+    color: #0891b2;
+}
+
+/* Alert con icono */
+.alert-ghost-icon {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+}
+
+/* ========================================
+   TABLAS
+   ======================================== */
+
+.table-ghost {
+    width: 100%;
+    border-collapse: collapse;
+    /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;*/
+    font-size: 14px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+.table-ghost th {
+    background: #f9fafb;
+    color: #374151;
+    font-weight: 600;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.table-ghost td {
+    padding: 12px 16px;
+    color: #6b7280;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.table-ghost tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.table-ghost tbody tr:hover {
+    background: #f9fafb;
+}
+
+/* ========================================
+   MODALES Y OVERLAYS
+   ======================================== */
+
+.modal-ghost-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-ghost {
+    background: white;
+    border-radius: 8px;
+    padding: 24px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;*/
+}
+
+.modal-ghost-header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.modal-ghost-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.modal-ghost-body {
+    color: #374151;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.modal-ghost-footer {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    padding-top: 12px;
+    border-top: 1px solid #f3f4f6;
+}
+
+/* ========================================
+   NAVEGACIÓN Y TABS
+   ======================================== */
+
+.nav-ghost {
+    display: flex;
+    border-bottom: 1px solid #e5e7eb;
+    background: white;
+}
+
+.nav-ghost-item {
+    padding: 12px 16px;
+    color: #6b7280;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;*/
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.nav-ghost-item:hover {
+    color: #374151;
+    text-decoration: none;
+}
+
+.nav-ghost-item.active {
+    color: #0d6efd;
+    border-bottom-color: #0d6efd;
+}
+
+/* ========================================
+   DROPDOWNS
+   ======================================== */
+
+.dropdown-ghost {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-ghost-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    min-width: 200px;
+    padding: 4px 0;
+    margin-top: 4px;
+}
+
+.dropdown-ghost-item {
+    display: block;
+    padding: 8px 12px;
+    color: #374151;
+    text-decoration: none;
+    font-size: 14px;
+    /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;*/
+    transition: background 0.2s ease;
+}
+
+.dropdown-ghost-item:hover {
+    background: #f9fafb;
+    text-decoration: none;
+}
+
+.dropdown-ghost-divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 4px 0;
+}
+
+/* ========================================
+   PROGRESS BARS
+   ======================================== */
+
+.progress-ghost {
+    width: 100%;
+    height: 8px;
+    background: #f3f4f6;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-ghost-bar {
+    height: 100%;
+    background: #0d6efd;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.progress-ghost-bar-success {
+    background: #198754;
+}
+
+.progress-ghost-bar-warning {
+    background: #fd7e14;
+}
+
+.progress-ghost-bar-danger {
+    background: #dc3545;
+}
+
+/* ========================================
+   CHECKBOXES Y RADIOS
+   ======================================== */
+
+.checkbox-ghost,
+.radio-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;*/
+    font-size: 14px;
+    color: #374151;
+    cursor: pointer;
+}
+
+.checkbox-ghost input[type="checkbox"],
+.radio-ghost input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+}
+
+.radio-ghost input[type="radio"] {
+    border-radius: 50%;
+}
+
+.checkbox-ghost input[type="checkbox"]:checked,
+.radio-ghost input[type="radio"]:checked {
+    background: #0d6efd;
+    border-color: #0d6efd;
+}
+
+/* ========================================
+   INPUT GROUPS
+   ======================================== */
+
+/* Input group base ghost */
+.input-group-ghost {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.input-group-ghost:hover {
+    border-color: #d1d5db;
+}
+
+.input-group-ghost:focus-within {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+/* Texto del input group */
+.input-group-ghost-text {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    background: #f9fafb;
+    color: #6b7280;
+    font-size: 14px;
+    /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;*/
+    border-right: 1px solid #e5e7eb;
+    white-space: nowrap;
+    min-width: fit-content;
+}
+
+.input-group-ghost-text i {
+    font-size: 14px;
+}
+
+/* Input dentro del group */
+.input-group-ghost .input-ghost-grouped {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+}
+
+.input-group-ghost .input-ghost-grouped:focus {
+    border: none;
+    box-shadow: none;
+}
+
+/* Botón dentro del input group */
+.input-group-ghost .btn-ghost-grouped {
+    border: none;
+    border-radius: 0;
+    border-left: 1px solid #e5e7eb;
+    background: white;
+    margin: 0;
+}
+
+.input-group-ghost .btn-ghost-grouped:hover {
+    background: #f9fafb;
+    border-left: 1px solid #e5e7eb;
+    box-shadow: none;
+}
+
+.input-group-ghost .btn-ghost-grouped:focus {
+    box-shadow: none;
+}
+
+/* Variantes de tamaño para input groups */
+.input-group-ghost-sm {
+    border-radius: 6px;
+}
+
+.input-group-ghost-sm .input-group-ghost-text {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+.input-group-ghost-sm .input-ghost-grouped {
+    padding: 6px 10px;
+    font-size: 12px;
+    min-height: 30px;
+}
+
+.input-group-ghost-sm .btn-ghost-grouped {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-height: 30px;
+}
+
+.input-group-ghost-lg {
+    border-radius: 10px;
+}
+
+.input-group-ghost-lg .input-group-ghost-text {
+    padding: 12px 16px;
+    font-size: 16px;
+}
+
+.input-group-ghost-lg .input-ghost-grouped {
+    padding: 12px 16px;
+    font-size: 16px;
+    min-height: 44px;
+}
+
+.input-group-ghost-lg .btn-ghost-grouped {
+    padding: 12px 24px;
+    font-size: 16px;
+    min-height: 44px;
+}
+
+/* Input group con múltiples elementos */
+.input-group-ghost .input-group-ghost-text:first-child {
+    border-right: 1px solid #e5e7eb;
+}
+
+.input-group-ghost .btn-ghost-grouped:not(:last-child) {
+    border-right: 1px solid #e5e7eb;
+}
+
+/* Estados especiales */
+.input-group-ghost.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.input-group-ghost.disabled .input-group-ghost-text {
+    background: #f3f4f6;
+    color: #9ca3af;
+}
+
+/* Variantes de color para input groups */
+.input-group-ghost-success {
+    border-color: #198754;
+}
+
+.input-group-ghost-success:focus-within {
+    box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.1);
+}
+
+.input-group-ghost-danger {
+    border-color: #dc3545;
+}
+
+.input-group-ghost-danger:focus-within {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+
+.input-group-ghost-warning {
+    border-color: #fd7e14;
+}
+
+.input-group-ghost-warning:focus-within {
+    box-shadow: 0 0 0 3px rgba(253, 126, 20, 0.1);
+}
+
+/* ========================================
+   UTILIDADES RESPONSIVAS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .card-ghost {
+        padding: 16px;
+    }
+    
+    .modal-ghost {
+        padding: 20px;
+        margin: 16px;
+    }
+    
+    .nav-ghost {
+        flex-direction: column;
+    }
+    
+    .nav-ghost-item {
+        border-bottom: none;
+        border-left: 2px solid transparent;
+    }
+    
+    .nav-ghost-item.active {
+        border-bottom: none;
+        border-left-color: #0d6efd;
+    }
+}
+
+/* ========================================
+   ESTADOS DE CARGA
+   ======================================== */
+
+.loading-ghost {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #e5e7eb;
+    border-top: 2px solid #0d6efd;
+    border-radius: 50%;
+    animation: loading-ghost-spin 1s linear infinite;
+}
+
+@keyframes loading-ghost-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-ghost-lg {
+    width: 24px;
+    height: 24px;
+    border-width: 3px;
+}
+
+/* ========================================
+   TOOLTIPS
+   ======================================== */
+
+.tooltip-ghost {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-ghost::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1f2937;
+    color: white;
+    padding: 6px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    margin-bottom: 4px;
+}
+
+.tooltip-ghost:hover::after {
+    opacity: 1;
+}
+
+/* ========================================
+   SISTEMA DE BOTONES GHOST MÉDICO
+   Estilo sutil profesional con todos los colores Bootstrap
+   ======================================== */
+
+/* Clase base para todos los botones ghost */
+.btn-ghost {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    color: #6b7280;
+    min-height: 38px;
+    /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;*/
+    line-height: 1.4;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.btn-ghost:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    text-decoration: none;
+}
+
+.btn-ghost:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.btn-ghost:active {
+    transform: translateY(1px);
+}
+
+.btn-ghost:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ========================================
+   COLORES BOOTSTRAP - VERSIÓN GHOST
+   ======================================== */
+
+/* PRIMARY - Azul */
+.btn-ghost-primary {
+    color: #0d6efd;
+}
+.btn-ghost-primary:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #0d6efd;
+}
+
+/* SECONDARY - Gris */
+.btn-ghost-secondary {
+    color: #6c757d;
+}
+.btn-ghost-secondary:hover {
+    background: #f8f9fa;
+    border-color: #d3d3d4;
+    color: #6c757d;
+}
+
+/* SUCCESS - Verde */
+.btn-ghost-success {
+    color: #198754;
+}
+.btn-ghost-success:hover {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #198754;
+}
+
+/* DANGER - Rojo */
+.btn-ghost-danger {
+    color: #dc3545;
+}
+.btn-ghost-danger:hover {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #dc3545;
+}
+
+/* WARNING - Amarillo */
+.btn-ghost-warning {
+    color: #fd7e14;
+}
+.btn-ghost-warning:hover {
+    background: #fffbeb;
+    border-color: #fed7aa;
+    color: #fd7e14;
+}
+
+/* INFO - Cian */
+.btn-ghost-info {
+    color: #0dcaf0;
+}
+.btn-ghost-info:hover {
+    background: #f0fdff;
+    border-color: #a5f3fc;
+    color: #0dcaf0;
+}
+
+/* LIGHT - Gris claro */
+.btn-ghost-light {
+    color: #495057;
+    border-color: #dee2e6;
+}
+.btn-ghost-light:hover {
+    background: #f8f9fa;
+    border-color: #ced4da;
+    color: #495057;
+}
+
+/* DARK - Negro */
+.btn-ghost-dark {
+    color: #212529;
+}
+.btn-ghost-dark:hover {
+    background: #f8f9fa;
+    border-color: #ced4da;
+    color: #212529;
+}
+
+/* ========================================
+   COLORES MÉDICOS PERSONALIZADOS
+   ======================================== */
+
+/* MEDICAL RED - Para urgencias */
+.btn-ghost-medical-red {
+    color: #dc2626;
+}
+.btn-ghost-medical-red:hover {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #dc2626;
+}
+
+/* MEDICAL ORANGE - Para alertas */
+.btn-ghost-medical-orange {
+    color: #f59e0b;
+}
+.btn-ghost-medical-orange:hover {
+    background: #fffbeb;
+    border-color: #fed7aa;
+    color: #f59e0b;
+}
+
+/* MEDICAL GREEN - Para confirmaciones */
+.btn-ghost-medical-green {
+    color: #059669;
+}
+.btn-ghost-medical-green:hover {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #059669;
+}
+
+/* MEDICAL BLUE - Para información */
+.btn-ghost-medical-blue {
+    color: #2563eb;
+}
+.btn-ghost-medical-blue:hover {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #2563eb;
+}
+
+/* ========================================
+   TAMAÑOS DE BOTONES
+   ======================================== */
+
+/* Tamaño pequeño */
+.btn-ghost-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-height: 30px;
+}
+
+/* Tamaño normal (ya definido en .btn-ghost) */
+
+/* Tamaño grande */
+.btn-ghost-lg {
+    padding: 12px 24px;
+    font-size: 16px;
+    min-height: 44px;
+}
+
+/* Tamaño extra grande */
+.btn-ghost-xl {
+    padding: 16px 32px;
+    font-size: 18px;
+    min-height: 52px;
+}
+
+/* ========================================
+   VARIANTES ESPECIALES
+   ======================================== */
+
+/* Botón fantasma con borde redondeado completo */
+.btn-ghost-pill {
+    border-radius: 50px;
+}
+
+/* Botón fantasma cuadrado */
+.btn-ghost-square {
+    border-radius: 4px;
+}
+
+/* Botón fantasma sin bordes */
+.btn-ghost-borderless {
+    border: none;
+    padding: 10px 18px;
+}
+
+.btn-ghost-borderless:hover {
+    border: none;
+    box-shadow: none;
+}
+
+/* Botón fantasma de ancho completo */
+.btn-ghost-block {
+    width: 100%;
+    justify-content: center;
+}
+
+/* ========================================
+   ESTADOS ESPECIALES
+   ======================================== */
+
+/* Estado activo */
+.btn-ghost.active,
+.btn-ghost:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Estado de carga */
+.btn-ghost.loading {
+    color: transparent;
+    pointer-events: none;
+    position: relative;
+}
+
+.btn-ghost.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #e5e7eb;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: btn-loading-spin 1s linear infinite;
+}
+
+@keyframes btn-loading-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ========================================
+   ICONOS EN BOTONES
+   ======================================== */
+
+.btn-ghost .icon {
+    width: 14px;
+    height: 14px;
+    fill: currentColor;
+    flex-shrink: 0;
+}
+
+.btn-ghost-sm .icon {
+    width: 12px;
+    height: 12px;
+}
+
+.btn-ghost-lg .icon {
+    width: 16px;
+    height: 16px;
+}
+
+.btn-ghost-xl .icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* Icono solo (sin texto) */
+.btn-ghost-icon-only {
+    width: 38px;
+    padding: 10px;
+    justify-content: center;
+}
+
+.btn-ghost-icon-only.btn-ghost-sm {
+    width: 30px;
+    padding: 6px;
+}
+
+.btn-ghost-icon-only.btn-ghost-lg {
+    width: 44px;
+    padding: 12px;
+}
+
+/* ========================================
+   BADGES Y INDICADORES
+   ======================================== */
+
+.btn-ghost .badge {
+    background: #ef4444;
+    color: white;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 4px;
+    line-height: 1;
+}
+
+.btn-ghost .dot-indicator {
+    width: 8px;
+    height: 8px;
+    background: #ef4444;
+    border-radius: 50%;
+    margin-left: 4px;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .btn-ghost-responsive {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 8px;
+    }
+    
+    .btn-ghost-responsive:last-child {
+        margin-bottom: 0;
+    }
+}
+
+/* ========================================
+   GRUPOS DE BOTONES
+   ======================================== */
+
+.btn-ghost-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.btn-ghost-group .btn-ghost {
+    flex: 1;
+    min-width: 0;
+}
+
+.btn-ghost-group-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.btn-ghost-group-vertical .btn-ghost {
+    width: 100%;
+}
+
+/* ========================================
+   UTILIDADES ADICIONALES
+   ======================================== */
+
+/* Texto en mayúsculas */
+.btn-ghost-uppercase {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Texto en negrita */
+.btn-ghost-bold {
+    font-weight: 600;
+}
+
+/* Sin sombra */
+.btn-ghost-no-shadow:hover {
+    box-shadow: none;
+}
+
+/* Transición lenta */
+.btn-ghost-slow {
+    transition: all 0.4s ease;
+}
+
+/* Sin efectos hover */
+.btn-ghost-static:hover {
+    background: white;
+    border-color: #e5e7eb;
+    box-shadow: none;
+    transform: none;
+}
