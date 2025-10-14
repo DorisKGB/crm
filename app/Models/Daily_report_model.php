@@ -80,6 +80,7 @@ class Daily_report_model extends Model
       $clinic_table = $this->db->prefixTable('clinic_directory');
       return $this->db->table($clinic_table)
         ->select('id, name')
+        ->where('deleted', 0) // ✅ Excluir clínicas eliminadas
         ->get()
         ->getResult();
     } catch (\Exception $e) {
@@ -258,6 +259,7 @@ class Daily_report_model extends Model
         ->select("$clinic_table.id, $clinic_table.name") // Selecciona los campos de la tabla clinic_directory
         ->join($branch_table, "$branch_table.id_clinic = $clinic_table.id") // Realiza el INNER JOIN con branch
         ->where("$branch_table.id_user", $user_id) // Filtra por el user_id en branch
+        ->where("$clinic_table.deleted", 0) // ✅ Excluir clínicas eliminadas
         ->get()
         ->getResult();
     } catch (\Exception $e) {
@@ -1237,33 +1239,37 @@ class Daily_report_model extends Model
     {
         try {
             $report_table = $this->db->prefixTable('daily_reports');
+            $clinic_table = $this->db->prefixTable('clinic_directory');
             
-            // Construir la consulta base
+            // Construir la consulta base con JOIN para excluir clínicas eliminadas
             $builder = $this->db->table($report_table);
             $builder->select([
-                "DATE_FORMAT(report_date, '%Y-%m') as month",
-                "DATE_FORMAT(report_date, '%M %Y') as month_name",
-                'SUM(sales_cash + sales_card + sales_other) as total_sales',
-                'SUM(sales_cash) as total_cash',
-                'SUM(sales_card) as total_card',
-                'SUM(sales_other) as total_other',
-                'SUM(new_patients_total) as total_new_patients',
-                'SUM(followup_patients_total) as total_followup_patients',
+                "DATE_FORMAT({$report_table}.report_date, '%Y-%m') as month",
+                "DATE_FORMAT({$report_table}.report_date, '%M %Y') as month_name",
+                "SUM({$report_table}.sales_cash + {$report_table}.sales_card + {$report_table}.sales_other) as total_sales",
+                "SUM({$report_table}.sales_cash) as total_cash",
+                "SUM({$report_table}.sales_card) as total_card",
+                "SUM({$report_table}.sales_other) as total_other",
+                "SUM({$report_table}.new_patients_total) as total_new_patients",
+                "SUM({$report_table}.followup_patients_total) as total_followup_patients",
                 'COUNT(*) as total_reports'
             ]);
             
-            $builder->where('clinic_id', $clinic_id);
+            // JOIN con clinic_directory para excluir clínicas eliminadas
+            $builder->join($clinic_table, "{$report_table}.clinic_id = {$clinic_table}.id");
+            $builder->where("{$report_table}.clinic_id", $clinic_id);
+            $builder->where("{$clinic_table}.deleted", 0); // Excluir clínicas eliminadas
             
             // Si se especifican meses específicos, filtrar por ellos
             if ($selected_months && is_array($selected_months) && !empty($selected_months)) {
                 $builder->groupStart();
                 foreach ($selected_months as $month) {
-                    $builder->orWhere("DATE_FORMAT(report_date, '%Y-%m')", $month);
+                    $builder->orWhere("DATE_FORMAT({$report_table}.report_date, '%Y-%m')", $month);
                 }
                 $builder->groupEnd();
             }
             
-            $builder->groupBy("DATE_FORMAT(report_date, '%Y-%m')");
+            $builder->groupBy("DATE_FORMAT({$report_table}.report_date, '%Y-%m')");
             $builder->orderBy('total_sales', 'DESC'); // Ordenar por rendimiento económico descendente
             
             $results = $builder->get()->getResultArray();
@@ -1307,16 +1313,20 @@ class Daily_report_model extends Model
     {
         try {
             $report_table = $this->db->prefixTable('daily_reports');
+            $clinic_table = $this->db->prefixTable('clinic_directory');
             
             $builder = $this->db->table($report_table);
             $builder->select([
-                "DATE_FORMAT(report_date, '%Y-%m') as month_value",
-                "DATE_FORMAT(report_date, '%M %Y') as month_label"
+                "DATE_FORMAT({$report_table}.report_date, '%Y-%m') as month_value",
+                "DATE_FORMAT({$report_table}.report_date, '%M %Y') as month_label"
             ]);
             
-            $builder->where('clinic_id', $clinic_id);
-            $builder->groupBy("DATE_FORMAT(report_date, '%Y-%m')");
-            $builder->orderBy('report_date', 'DESC');
+            // JOIN con clinic_directory para excluir clínicas eliminadas
+            $builder->join($clinic_table, "{$report_table}.clinic_id = {$clinic_table}.id");
+            $builder->where("{$report_table}.clinic_id", $clinic_id);
+            $builder->where("{$clinic_table}.deleted", 0); // Excluir clínicas eliminadas
+            $builder->groupBy("DATE_FORMAT({$report_table}.report_date, '%Y-%m')");
+            $builder->orderBy("{$report_table}.report_date", 'DESC');
             
             $results = $builder->get()->getResultArray();
             
@@ -1346,31 +1356,35 @@ class Daily_report_model extends Model
     {
         try {
             $report_table = $this->db->prefixTable('daily_reports');
+            $clinic_table = $this->db->prefixTable('clinic_directory');
             
-            // Construir la consulta base
+            // Construir la consulta base con JOIN para excluir clínicas eliminadas
             $builder = $this->db->table($report_table);
             $builder->select([
-                "DATE_FORMAT(report_date, '%Y-%m') as month",
-                "DATE_FORMAT(report_date, '%Y-%m-01') as month_date",
-                "DATE_FORMAT(report_date, '%M %Y') as month_name",
-                'SUM(sales_cash + sales_card + sales_other) as total_sales',
-                'SUM(new_patients_total) as total_new_patients',
-                'SUM(followup_patients_total) as total_followup_patients'
+                "DATE_FORMAT({$report_table}.report_date, '%Y-%m') as month",
+                "DATE_FORMAT({$report_table}.report_date, '%Y-%m-01') as month_date",
+                "DATE_FORMAT({$report_table}.report_date, '%M %Y') as month_name",
+                "SUM({$report_table}.sales_cash + {$report_table}.sales_card + {$report_table}.sales_other) as total_sales",
+                "SUM({$report_table}.new_patients_total) as total_new_patients",
+                "SUM({$report_table}.followup_patients_total) as total_followup_patients"
             ]);
             
-            $builder->where('clinic_id', $clinic_id);
+            // JOIN con clinic_directory para excluir clínicas eliminadas
+            $builder->join($clinic_table, "{$report_table}.clinic_id = {$clinic_table}.id");
+            $builder->where("{$report_table}.clinic_id", $clinic_id);
+            $builder->where("{$clinic_table}.deleted", 0); // Excluir clínicas eliminadas
             
             // Si se especifican meses específicos, filtrar por ellos
             if ($selected_months && is_array($selected_months) && !empty($selected_months)) {
                 $builder->groupStart();
                 foreach ($selected_months as $month) {
-                    $builder->orWhere("DATE_FORMAT(report_date, '%Y-%m')", $month);
+                    $builder->orWhere("DATE_FORMAT({$report_table}.report_date, '%Y-%m')", $month);
                 }
                 $builder->groupEnd();
             }
             
-            $builder->groupBy("DATE_FORMAT(report_date, '%Y-%m')");
-            $builder->orderBy('report_date', 'ASC'); // Ordenar cronológicamente (ascendente)
+            $builder->groupBy("DATE_FORMAT({$report_table}.report_date, '%Y-%m')");
+            $builder->orderBy("{$report_table}.report_date", 'ASC'); // Ordenar cronológicamente (ascendente)
             
             $results = $builder->get()->getResultArray();
             
