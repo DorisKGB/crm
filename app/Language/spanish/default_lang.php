@@ -3256,5 +3256,6 @@ $lang["select_clinic_to_view_stats"] = "Seleccione una clínica para ver las est
 $lang["stats_description"] = "Las estadísticas mostrarán los meses con mejor rendimiento económico";
 $lang["was_best_month_with_sales"] = "fue el mejor mes con ventas totales de";
 $lang["best_months"] = "Mejores Meses";
+$lang["monthly_trends"] = "Tendencias Mensuales";
 
 return $lang;

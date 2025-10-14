@@ -126,6 +126,27 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Gráfica de Tendencias Cronológicas -->
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0">
+                                        <i data-feather="activity" class="icon-16"></i> 
+                                        <?php echo app_lang('monthly_trends'); ?>
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="monthly-trends-chart" style="width: 100%; min-height: 350px;"></canvas>
+                                    <div id="no-data-trends-chart" style="display: none;" class="py-5 text-center">
+                                        <i data-feather="bar-chart-2" style="width: 60px; height: 60px;" class="text-muted mb-3"></i>
+                                        <p class="text-muted"><?php echo app_lang('no_data_to_chart'); ?></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Loading Spinner -->
@@ -156,6 +177,7 @@
 $(document).ready(function() {
     let currentClinicId = null;
     let availableMonths = [];
+    let trendsChartInstance = null; // Variable para almacenar la instancia de la gráfica
     
     // Traducciones
     const translations = {
@@ -204,12 +226,20 @@ $(document).ready(function() {
         modalDialog.off('wheel');
         modalBody.off('wheel');
         
+        // Destruir gráfica si existe
+        if (trendsChartInstance) {
+            trendsChartInstance.destroy();
+            trendsChartInstance = null;
+        }
+        
         // Limpiar datos
         $('#stats-clinic-select').val('');
         $('#stats-results-container').addClass('d-none');
         $('#months-selector-container').addClass('d-none');
         $('#stats-loading').addClass('d-none');
         $('#stats-empty-state').removeClass('d-none');
+        $('#monthly-trends-chart').hide();
+        $('#no-data-trends-chart').hide();
         currentClinicId = null;
         availableMonths = [];
     });
@@ -324,6 +354,8 @@ $(document).ready(function() {
                 if (response.success && response.data.length > 0) {
                     renderStats(response.data);
                     $('#stats-results-container').removeClass('d-none');
+                    // Cargar también la gráfica de tendencias
+                    loadTrendsChart(clinicId, selectedMonths);
                 } else {
                     alert(response.message || 'No se encontraron datos para mostrar');
                     $('#stats-empty-state').removeClass('d-none');
@@ -388,6 +420,246 @@ $(document).ready(function() {
     // Formatear números con separadores de miles
     function formatNumber(num) {
         return parseFloat(num).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Cargar datos de la gráfica de tendencias
+    function loadTrendsChart(clinicId, selectedMonths) {
+        console.log('Cargando gráfica de tendencias...', clinicId, selectedMonths);
+        $.ajax({
+            url: '<?php echo get_uri("daily_report/get_monthly_trends_chart_data"); ?>',
+            type: 'POST',
+            data: { 
+                clinic_id: clinicId,
+                selected_months: selectedMonths ? JSON.stringify(selectedMonths) : null
+            },
+            dataType: 'json',
+            success: function(response) {
+                console.log('Respuesta de tendencias:', response);
+                if (response.success && response.data) {
+                    renderTrendsChart(response.data);
+                } else {
+                    console.log('No hay datos para tendencias');
+                    showNoDataTrends();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error cargando gráfica de tendencias:', error);
+                console.error('XHR:', xhr);
+                showNoDataTrends();
+            }
+        });
+    }
+
+    // Renderizar gráfica de tendencias
+    function renderTrendsChart(data) {
+        console.log('Renderizando gráfica con datos:', data);
+        const chartCanvas = document.getElementById('monthly-trends-chart');
+        const noDataDiv = document.getElementById('no-data-trends-chart');
+
+        console.log('Canvas:', chartCanvas);
+        console.log('NoData div:', noDataDiv);
+
+        if (!data.labels || data.labels.length === 0) {
+            console.log('No hay labels, mostrando mensaje sin datos');
+            chartCanvas.style.display = 'none';
+            noDataDiv.style.display = 'block';
+            return;
+        }
+
+        chartCanvas.style.display = 'block';
+        noDataDiv.style.display = 'none';
+
+        // Destruir gráfica anterior si existe
+        if (trendsChartInstance) {
+            console.log('Destruyendo gráfica anterior');
+            trendsChartInstance.destroy();
+        }
+
+        // Formatear labels con nombres de meses
+        const formattedLabels = data.labels.map(function(value) {
+            const parts = value.split('-');
+            const year = parts[0];
+            const monthIndex = parseInt(parts[1], 10);
+            const monthNames = [
+                "<?php echo app_lang('january'); ?>",
+                "<?php echo app_lang('february'); ?>",
+                "<?php echo app_lang('march'); ?>",
+                "<?php echo app_lang('april'); ?>",
+                "<?php echo app_lang('may'); ?>",
+                "<?php echo app_lang('june'); ?>",
+                "<?php echo app_lang('july'); ?>",
+                "<?php echo app_lang('august'); ?>",
+                "<?php echo app_lang('september'); ?>",
+                "<?php echo app_lang('october'); ?>",
+                "<?php echo app_lang('november'); ?>",
+                "<?php echo app_lang('december'); ?>"
+            ];
+            const month = monthNames[monthIndex - 1];
+            return `${month} ${year}`;
+        });
+
+        const config = {
+            type: 'line',
+            data: {
+                labels: formattedLabels,
+                datasets: [
+                    {
+                        label: '<?php echo app_lang("total_sales"); ?>',
+                        data: data.sales,
+                        borderColor: '#32A483',
+                        backgroundColor: 'rgba(50, 164, 131, 0.2)',
+                        borderWidth: 2,
+                        fill: true,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#32A483',
+                        yAxisID: 'y-axis-sales',
+                        lineTension: 0.3
+                    },
+                    {
+                        label: '<?php echo app_lang("new_patients"); ?>',
+                        data: data.new_patients,
+                        borderColor: '#E05008',
+                        backgroundColor: 'rgba(224, 80, 8, 0.2)',
+                        borderWidth: 2,
+                        fill: true,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#E05008',
+                        yAxisID: 'y-axis-patients',
+                        lineTension: 0.3
+                    },
+                    {
+                        label: '<?php echo app_lang("followup"); ?>',
+                        data: data.followup_patients,
+                        borderColor: '#4E5E6A',
+                        backgroundColor: 'rgba(78, 94, 106, 0.2)',
+                        borderWidth: 2,
+                        fill: true,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#4E5E6A',
+                        yAxisID: 'y-axis-patients',
+                        lineTension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15
+                    }
+                },
+                title: {
+                    display: true,
+                    text: '<?php echo app_lang("monthly_trends"); ?>',
+                    fontSize: 16,
+                    padding: 20
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            let label = data.datasets[tooltipItem.datasetIndex].label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (data.datasets[tooltipItem.datasetIndex].yAxisID === 'y-axis-sales') {
+                                label += '$' + tooltipItem.yLabel.toLocaleString('en-US');
+                            } else {
+                                label += tooltipItem.yLabel;
+                            }
+                            return label;
+                        }
+                    }
+                },
+                hover: {
+                    mode: 'index',
+                    intersect: false
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: '<?php echo app_lang("month"); ?>',
+                            fontStyle: 'bold'
+                        },
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 0
+                        }
+                    }],
+                    yAxes: [
+                        {
+                            id: 'y-axis-sales',
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            scaleLabel: {
+                                display: true,
+                                labelString: '<?php echo app_lang("total_sales"); ?> ($)',
+                                fontColor: '#32A483',
+                                fontStyle: 'bold'
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function(value, index, values) {
+                                    return '$' + value.toLocaleString('en-US');
+                                }
+                            }
+                        },
+                        {
+                            id: 'y-axis-patients',
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            scaleLabel: {
+                                display: true,
+                                labelString: '<?php echo app_lang("number_of_patients"); ?>',
+                                fontColor: '#E05008',
+                                fontStyle: 'bold'
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                callback: function(value, index, values) {
+                                    return Math.floor(value) === value ? value : null;
+                                }
+                            },
+                            gridLines: {
+                                drawOnChartArea: false
+                            }
+                        }
+                    ]
+                }
+            }
+        };
+
+        const ctx = chartCanvas.getContext('2d');
+        console.log('Creando nueva instancia de Chart con config:', config);
+        trendsChartInstance = new Chart(ctx, config);
+        console.log('Gráfica creada exitosamente:', trendsChartInstance);
+
+        // Recargar iconos de Feather
+        if (typeof feather !== 'undefined') {
+            feather.replace();
+        }
+    }
+
+    // Mostrar mensaje de "sin datos" para la gráfica
+    function showNoDataTrends() {
+        const chartCanvas = document.getElementById('monthly-trends-chart');
+        const noDataDiv = document.getElementById('no-data-trends-chart');
+        
+        chartCanvas.style.display = 'none';
+        noDataDiv.style.display = 'block';
+
+        // Recargar iconos de Feather
+        if (typeof feather !== 'undefined') {
+            feather.replace();
+        }
     }
 });
 </script>

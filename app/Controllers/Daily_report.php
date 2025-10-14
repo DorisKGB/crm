@@ -1299,4 +1299,36 @@ foreach ($indicators as $key => $label) {
         $result = $this->dailyReportModel->getMonthlyEconomicStats($clinic_id, $selected_months);
         return $this->response->setJSON($result);
     }
+
+    /**
+     * Obtener datos cronológicos para gráfica de tendencias mensuales
+     */
+    public function get_monthly_trends_chart_data()
+    {
+        // Solo administradores pueden acceder
+        if (!$this->login_user->is_admin) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Acceso denegado. Solo administradores pueden acceder a esta función.'
+            ]);
+        }
+
+        $clinic_id = $this->request->getPost('clinic_id');
+        $selected_months = $this->request->getPost('selected_months');
+        
+        if (!$clinic_id) {
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'ID de clínica requerido'
+            ]);
+        }
+
+        // Si selected_months es un string JSON, convertirlo a array
+        if (is_string($selected_months)) {
+            $selected_months = json_decode($selected_months, true);
+        }
+
+        $result = $this->dailyReportModel->getMonthlyTrendsChartData($clinic_id, $selected_months);
+        return $this->response->setJSON($result);
+    }
 }

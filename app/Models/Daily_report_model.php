@@ -1334,4 +1334,84 @@ class Daily_report_model extends Model
             ];
         }
     }
+
+    /**
+     * Obtener datos cronológicos para gráfica de tendencias mensuales
+     * Devuelve datos ordenados por fecha (cronológicamente)
+     * @param int $clinic_id
+     * @param array $selected_months Array de meses en formato 'Y-m' o null para todos
+     * @return array
+     */
+    public function getMonthlyTrendsChartData($clinic_id, $selected_months = null)
+    {
+        try {
+            $report_table = $this->db->prefixTable('daily_reports');
+            
+            // Construir la consulta base
+            $builder = $this->db->table($report_table);
+            $builder->select([
+                "DATE_FORMAT(report_date, '%Y-%m') as month",
+                "DATE_FORMAT(report_date, '%Y-%m-01') as month_date",
+                "DATE_FORMAT(report_date, '%M %Y') as month_name",
+                'SUM(sales_cash + sales_card + sales_other) as total_sales',
+                'SUM(new_patients_total) as total_new_patients',
+                'SUM(followup_patients_total) as total_followup_patients'
+            ]);
+            
+            $builder->where('clinic_id', $clinic_id);
+            
+            // Si se especifican meses específicos, filtrar por ellos
+            if ($selected_months && is_array($selected_months) && !empty($selected_months)) {
+                $builder->groupStart();
+                foreach ($selected_months as $month) {
+                    $builder->orWhere("DATE_FORMAT(report_date, '%Y-%m')", $month);
+                }
+                $builder->groupEnd();
+            }
+            
+            $builder->groupBy("DATE_FORMAT(report_date, '%Y-%m')");
+            $builder->orderBy('report_date', 'ASC'); // Ordenar cronológicamente (ascendente)
+            
+            $results = $builder->get()->getResultArray();
+            
+            if (empty($results)) {
+                return [
+                    'success' => false,
+                    'message' => 'No se encontraron reportes para esta clínica',
+                    'data' => []
+                ];
+            }
+            
+            // Preparar los datos para la gráfica
+            $labels = [];
+            $salesData = [];
+            $newPatientsData = [];
+            $followupPatientsData = [];
+            
+            foreach ($results as $result) {
+                $labels[] = $result['month_date']; // Formato: 2024-01-01
+                $salesData[] = floatval($result['total_sales']);
+                $newPatientsData[] = intval($result['total_new_patients']);
+                $followupPatientsData[] = intval($result['total_followup_patients']);
+            }
+            
+            return [
+                'success' => true,
+                'data' => [
+                    'labels' => $labels,
+                    'sales' => $salesData,
+                    'new_patients' => $newPatientsData,
+                    'followup_patients' => $followupPatientsData
+                ]
+            ];
+            
+        } catch (\Exception $e) {
+            log_message('error', "Error al obtener datos de tendencias mensuales: " . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Error al obtener datos de tendencias: ' . $e->getMessage(),
+                'data' => []
+            ];
+        }
+    }
 }
