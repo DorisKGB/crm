@@ -61,6 +61,24 @@ $excuse_permission = get_array_value($permissions2, "excuse_permission");
         text-align: center;
     }
 
+    .tab-loader {
+        display: none;
+        text-align: center;
+        padding: 20px;
+        color: #666;
+        font-size: 14px;
+    }
+
+    .tab-loader i {
+        animation: spin 1s linear infinite;
+        margin-right: 8px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
     /* Contenedor general para los cards */
     .cards-container {
         display: flex;
@@ -275,8 +293,38 @@ $excuse_permission = get_array_value($permissions2, "excuse_permission");
                             <a class="nav-link" href="#" data-state="denied">Negadas (0)</a>
                         </li>
                     </ul>
+                    <!-- Loader para tabs -->
+                    <div class="tab-loader" id="tab-loader">
+                        <i class="fas fa-spinner"></i>
+                        Cargando excusas...
+                    </div>
+                    
                     <div class="" id="cards-container">
                         <!-- Aquí se cargarán las cards con JS -->
+                    </div>
+                    
+                    <!-- Controles de paginación -->
+                    <div id="pagination-controls" class="mt-3" style="display: none;">
+                        <nav aria-label="Paginación de excusas">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" id="prev-page">
+                                    <a class="page-link" href="#" onclick="loadExcuses(paginationData.prev_page, false); return false;">
+                                        <i class="fas fa-chevron-left"></i> Anterior
+                                    </a>
+                                </li>
+                                <li class="page-item active" id="current-page">
+                                    <span class="page-link" id="current-page-text">1</span>
+                                </li>
+                                <li class="page-item" id="next-page">
+                                    <a class="page-link" href="#" onclick="loadExcuses(paginationData.next_page, false); return false;">
+                                        Siguiente <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div class="text-center text-muted">
+                            <small id="pagination-info">Mostrando 1-20 de 0 excusas</small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -320,6 +368,9 @@ $excuse_permission = get_array_value($permissions2, "excuse_permission");
 
     let allExcuses = [];
     let currentState = 'request'; 
+    let currentPage = 1;
+    let perPage = 20;
+    let paginationData = null; 
 
     flatpickr("#fecha_nacimiento_laboral", {
         dateFormat: "m-d-Y", // Establece el formato MM-DD-YYYY
@@ -371,6 +422,20 @@ $excuse_permission = get_array_value($permissions2, "excuse_permission");
         setTimeout(() => {
             notification.style.display = 'none';
         }, 3000);
+    }
+
+    function showTabLoader() {
+        document.getElementById('tab-loader').style.display = 'block';
+        document.getElementById('cards-container').style.display = 'none';
+        document.getElementById('pagination-controls').style.display = 'none';
+    }
+
+    function hideTabLoader() {
+        document.getElementById('tab-loader').style.display = 'none';
+        document.getElementById('cards-container').style.display = 'block';
+        if (paginationData && paginationData.total_pages > 1) {
+            document.getElementById('pagination-controls').style.display = 'block';
+        }
     }
 
     function formatDateUS(isoDate) {
@@ -491,59 +556,166 @@ $excuse_permission = get_array_value($permissions2, "excuse_permission");
         }
     }*/
 
-    async function loadExcuses() {
+    async function loadExcuses(page = 1, showLoader = true) {
         try {
-            let response = await fetch('<?= site_url("excuse/listAjax") ?>');
+            if (showLoader) {
+                showTabLoader();
+                // Pequeño delay para que el loader sea visible
+                await new Promise(resolve => setTimeout(resolve, 300));
+            }
+            
+            currentPage = page;
+            let url = `<?= site_url("excuse/listAjax") ?>?page=${page}&per_page=${perPage}&state=${currentState}`;
+            console.log('Cargando excusas desde:', url);
+            
+            let response = await fetch(url);
+            
+            // Verificar si la respuesta es HTML (error)
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await response.text();
+                console.error('Respuesta no es JSON:', text);
+                notify('Error: El servidor devolvió una respuesta no válida', 'error');
+                return;
+            }
+            
             let data = await response.json();
             if (data.success) {
                 allExcuses = data.excuses;
-                renderFilteredExcuses();
+                paginationData = data.pagination;
+                await renderFilteredExcuses();
+                updatePaginationControls();
+            } else {
+                console.error('Error del servidor:', data);
+                notify('Error: ' + (data.message || 'Error desconocido'), 'error');
             }
         } catch (error) {
             console.error('Error al cargar excusas:', error);
+            notify('Error de conexión al cargar excusas', 'error');
+        } finally {
+            if (showLoader) {
+                hideTabLoader();
+            }
         }
     }
 
-    function renderFilteredExcuses() {
-        updateExcuseCounts();
+    async function renderFilteredExcuses() {
+        await updateExcuseCounts();
         let container = document.getElementById('cards-container');
         container.innerHTML = '';
-        // filtrar según estado
-        let filtered = allExcuses.filter(exc => {
-            if (currentState === 'request')   return exc.state === 'request';
-            if (currentState === 'approved')  return exc.state === 'approved';
-            if (currentState === 'denied')    return exc.state === 'denied';
-        });
-        // construir y añadir cada card
-        filtered.forEach(exc => {
+        
+        // Ya no necesitamos filtrar por estado aquí, se hace en el backend
+        // Solo mostramos las excusas que vienen del servidor
+        allExcuses.forEach(exc => {
             container.insertAdjacentHTML('beforeend', buildCard(exc));
         });
         attachCardEventListeners();
         applySearchFilter(); // reaplica el filtro de búsqueda
     }
 
-    function updateExcuseCounts() {
-        const pendingCount  = allExcuses.filter(exc => exc.state === 'request').length;
-        const approvedCount = allExcuses.filter(exc => exc.state === 'approved').length;
-        const deniedCount   = allExcuses.filter(exc => exc.state === 'denied').length;
-
+    async function updateExcuseCounts() {
+        try {
+            let response = await fetch('<?= site_url("excuse/countsAjax") ?>');
+            
+            // Verificar si la respuesta es HTML (error)
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+                const text = await response.text();
+                console.error('Respuesta de conteos no es JSON:', text);
+                // Usar conteos por defecto
         document.querySelector('#excuseStatusTabs [data-state="request"]')
-            .textContent = `Pendientes (${pendingCount})`;
+                    .textContent = `Pendientes (0)`;
         document.querySelector('#excuseStatusTabs [data-state="approved"]')
-            .textContent = `Aprobadas (${approvedCount})`;
+                    .textContent = `Aprobadas (0)`;
         document.querySelector('#excuseStatusTabs [data-state="denied"]')
-            .textContent = `Negadas (${deniedCount})`;
+                    .textContent = `Negadas (0)`;
+                return;
+            }
+            
+            let data = await response.json();
+            if (data.success) {
+                const counts = data.counts;
+                document.querySelector('#excuseStatusTabs [data-state="request"]')
+                    .textContent = `Pendientes (${counts.request})`;
+                document.querySelector('#excuseStatusTabs [data-state="approved"]')
+                    .textContent = `Aprobadas (${counts.approved})`;
+                document.querySelector('#excuseStatusTabs [data-state="denied"]')
+                    .textContent = `Negadas (${counts.denied})`;
+            }
+        } catch (error) {
+            console.error('Error al cargar conteos:', error);
+            // Usar conteos por defecto en caso de error
+            document.querySelector('#excuseStatusTabs [data-state="request"]')
+                .textContent = `Pendientes (0)`;
+            document.querySelector('#excuseStatusTabs [data-state="approved"]')
+                .textContent = `Aprobadas (0)`;
+            document.querySelector('#excuseStatusTabs [data-state="denied"]')
+                .textContent = `Negadas (0)`;
+        }
+    }
+
+    function updatePaginationControls() {
+        if (!paginationData) return;
+        
+        const controls = document.getElementById('pagination-controls');
+        const prevBtn = document.getElementById('prev-page');
+        const nextBtn = document.getElementById('next-page');
+        const currentPageText = document.getElementById('current-page-text');
+        const paginationInfo = document.getElementById('pagination-info');
+        
+        // Mostrar/ocultar controles según si hay múltiples páginas
+        if (paginationData.total_pages > 1) {
+            controls.style.display = 'block';
+        } else {
+            controls.style.display = 'none';
+        }
+        
+        // Actualizar estado de botones
+        if (paginationData.has_prev) {
+            prevBtn.classList.remove('disabled');
+            prevBtn.querySelector('a').style.pointerEvents = 'auto';
+        } else {
+            prevBtn.classList.add('disabled');
+            prevBtn.querySelector('a').style.pointerEvents = 'none';
+        }
+        
+        if (paginationData.has_next) {
+            nextBtn.classList.remove('disabled');
+            nextBtn.querySelector('a').style.pointerEvents = 'auto';
+        } else {
+            nextBtn.classList.add('disabled');
+            nextBtn.querySelector('a').style.pointerEvents = 'none';
+        }
+        
+        // Actualizar texto de página actual
+        currentPageText.textContent = `${paginationData.current_page} de ${paginationData.total_pages}`;
+        
+        // Actualizar información de registros
+        const start = ((paginationData.current_page - 1) * paginationData.per_page) + 1;
+        const end = Math.min(paginationData.current_page * paginationData.per_page, paginationData.total);
+        paginationInfo.textContent = `Mostrando ${start}-${end} de ${paginationData.total} excusas`;
     }
 
 
     document.querySelectorAll('#excuseStatusTabs .nav-link').forEach(tab => {
         tab.addEventListener('click', e => {
             e.preventDefault();
+            
+            // Solo proceder si no es el tab activo actual
+            if (tab.classList.contains('active')) {
+                return;
+            }
+            
             document.querySelectorAll('#excuseStatusTabs .nav-link')
                 .forEach(a => a.classList.remove('active'));
             tab.classList.add('active');
             currentState = tab.dataset.state;
-            renderFilteredExcuses();
+            
+            // Resetear a la primera página cuando se cambie de estado
+            currentPage = 1;
+            
+            // Mostrar loader y cargar excusas
+            loadExcuses(1, true);
         });
     });
 
@@ -691,7 +863,7 @@ $excuse_permission = get_array_value($permissions2, "excuse_permission");
                 form.reset();
                 editingId = null;
                 document.getElementById('state').value = 'request';
-                loadExcuses();
+                await loadExcuses(1, false);
             } else {
                 notify('Error: ' + JSON.stringify(result.errors), 'error');
             }
@@ -744,7 +916,7 @@ $excuse_permission = get_array_value($permissions2, "excuse_permission");
                         });
                         let result = await response.json();
                         if (result.success) {
-                            loadExcuses();
+                            await loadExcuses(1, false);
                         } else {
                             alert('Error al aprobar');
                         }
@@ -766,7 +938,7 @@ $excuse_permission = get_array_value($permissions2, "excuse_permission");
                         });
                         let result = await response.json();
                         if (result.success) {
-                            loadExcuses();
+                            await loadExcuses(1, false);
                         } else {
                             alert('Error al denegar');
                         }
@@ -797,9 +969,10 @@ $excuse_permission = get_array_value($permissions2, "excuse_permission");
     document.getElementById('form-laboral').addEventListener('submit', submitForm);
 
     // Cargar la lista de excusas y la lista de proveedores al iniciar
-    loadExcuses();
-    loadProviders();
-    loadClinics();
+    loadExcuses(1, false).then(() => {
+        loadProviders();
+        loadClinics();
+    });
 
     // Eventos para el modal de proveedor
     /*document.getElementById('open-provider-modal').addEventListener('click', function() {
@@ -848,7 +1021,7 @@ $excuse_permission = get_array_value($permissions2, "excuse_permission");
                     notify(result.message, 'success');
                     // Abre el PDF usando la URL que retorna el endpoint (generatePdf)
                     window.open(result.pdfUrl, '_blank');
-                    loadExcuses();
+                    await loadExcuses(1, false);
                 } else {
                     notify('Error al aprobar', 'error');
                 }
@@ -899,7 +1072,7 @@ $excuse_permission = get_array_value($permissions2, "excuse_permission");
                         let result = await response.json();
                         if (result.success) {
                             notify(result.message, 'success');
-                            loadExcuses();
+                            await loadExcuses(1, false);
                         } else {
                             notify('Error al denegar', 'error');
                         }

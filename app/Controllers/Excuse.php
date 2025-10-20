@@ -137,55 +137,62 @@ class Excuse extends Security_Controller {
         $excuse_permission = get_array_value($permissions, "excuse_permission");
         $user_id = $this->login_user->id;
         
-
-        if ($excuse_permission === "provider") {
-            // Obtener el registro del proveedor asociado al usuario
-            //$excuses = $this->excuseModel->get_all_where(['provider_user_id' => $user_id])->getResult();
-
-            /*$db = \Config\Database::connect();
-            $builder = $db->table($this->excuseModel->table);
-            $builder->groupStart();
-            $builder->where('provider_user_id', $user_id);
-            $builder->orWhere('generate_for', $user_id);
-            $builder->groupEnd();
-            $builder->orderBy('created_at', 'DESC');
-            $excuses = $builder->get()->getResult();*/
-
-           $db = \Config\Database::connect();
-$builder = $db->table($this->excuseModel->table . ' AS e');
-
-// Hacer un JOIN con crm_branch para validar el acceso a la clínica
-$builder->join('crm_branch AS b', 'e.clinic_id = b.id_clinic', 'inner');
-
-// Seleccionar solo registros únicos
-$builder->select('DISTINCT e.*', false); 
-
-// Condiciones: El usuario debe ser el proveedor o el generador de la excusa
-$builder->groupStart();
-$builder->where('e.provider_user_id', $user_id);
-$builder->orWhere('e.generate_for', $user_id);
-$builder->orWhere('b.id_user', $user_id);
-$builder->groupEnd();
-
-// Filtrar por excusas no eliminadas
-$builder->where('e.deleted', 0);
-
-// Ordenar por la fecha de creación
-$builder->orderBy('e.created_at', 'DESC');
-
-$excuses = $builder->get()->getResult();
-            
-        } elseif ($this->login_user->is_admin || $excuse_permission === "all") {
-            // Administrador o permiso "all": trae todas las excusas
-            $excuses = $this->excuseModel->get_all()->getResult();
-        } elseif ($excuse_permission === "request") {
-            // Si el permiso es "request": filtra por el campo "generate_for" (se asume que existe)
-            $excuses = $this->excuseModel->get_all_where(['generate_for' => $user_id])->getResult();
-        } else {
-            $excuses = [];
-        }
+        // Obtener parámetros de paginación y filtros
+        $page = (int) $this->request->getGet('page') ?: 1;
+        $per_page = (int) $this->request->getGet('per_page') ?: 20;
+        $state = $this->request->getGet('state'); // Filtro por estado
         
-        return $this->response->setJSON(['success' => true, 'excuses' => $excuses]);
+        // Validar parámetros
+        if ($page < 1) $page = 1;
+        if ($per_page < 1 || $per_page > 100) $per_page = 20; // Máximo 100 registros por página
+        
+        // Usar el nuevo método paginado del modelo
+        $result = $this->excuseModel->get_excuses_paginated(
+            $user_id, 
+            $excuse_permission, 
+            $this->login_user->is_admin, 
+            $page, 
+            $per_page,
+            $state
+        );
+        
+        return $this->response->setJSON([
+            'success' => true, 
+            'excuses' => $result['excuses'],
+            'pagination' => $result['pagination']
+        ]);
+    }
+
+    // GET excuse/countsAjax: devuelve los conteos de excusas por estado
+    public function countsAjax() {
+        try {
+            // Verificar que el usuario esté logueado
+            if (!$this->login_user) {
+                return $this->response->setJSON([
+                    'success' => false,
+                    'message' => 'Usuario no autenticado',
+                    'counts' => ['request' => 0, 'approved' => 0, 'denied' => 0]
+                ]);
+            }
+            
+            $permissions = $this->login_user->permissions ?? [];
+            $excuse_permission = get_array_value($permissions, "excuse_permission");
+            $user_id = $this->login_user->id;
+            
+            $counts = $this->excuseModel->get_excuse_counts($user_id, $excuse_permission, $this->login_user->is_admin);
+            
+            return $this->response->setJSON([
+                'success' => true,
+                'counts' => $counts
+            ]);
+        } catch (\Exception $e) {
+            log_message('error', 'Error en countsAjax: ' . $e->getMessage());
+            return $this->response->setJSON([
+                'success' => false,
+                'message' => 'Error al obtener conteos: ' . $e->getMessage(),
+                'counts' => ['request' => 0, 'approved' => 0, 'denied' => 0]
+            ]);
+        }
     }
     
     
@@ -396,6 +403,13 @@ $excuses = $builder->get()->getResult();
         $provider = new Provider_model();
         $provider_user = $provider->where('user_id',$userID)->get()->getRow();
 
+        if (!$provider_user) {
+            return $this->response->setJSON([
+                'success' => false, 
+                'message' => 'Proveedor no encontrado'
+            ]);
+        }
+
         $data = [
             'state' => 'approved',
             'provider'           => $provider_user->name,
@@ -418,6 +432,13 @@ $excuses = $builder->get()->getResult();
         $approvedFor = $this->login_user->first_name . ' ' . $this->login_user->last_name;
         $provider = new Provider_model();
         $provider_user = $provider->where('user_id',$userID)->get()->getRow();
+
+        if (!$provider_user) {
+            return $this->response->setJSON([
+                'success' => false, 
+                'message' => 'Proveedor no encontrado'
+            ]);
+        }
 
         $data = [
             'state'        => 'approved',
@@ -443,6 +464,14 @@ $excuses = $builder->get()->getResult();
     public function denyAjax($id,$userID) {
         $provider = new Provider_model();
         $provider_user = $provider->where('user_id',$userID)->get()->getRow();
+        
+        if (!$provider_user) {
+            return $this->response->setJSON([
+                'success' => false, 
+                'message' => 'Proveedor no encontrado'
+            ]);
+        }
+        
         $data = [
             'state' => 'denied',
             'provider'           => $provider_user->name,
