@@ -75,14 +75,15 @@ $routes->get('store/process_order/(:any)/ssKey', 'Store::process_order/$1/ssKey'
 
 //$routes->get('excuse/create', 'Excuse::create');
 $routes->get('excuse/listAjax', 'Excuse::listAjax');
+$routes->get('excuse/countsAjax', 'Excuse::countsAjax');
 $routes->get('excuse/showAjax/(:num)', 'Excuse::showAjax/$1');
 $routes->post('excuse/storeAjax', 'Excuse::storeAjax');
 $routes->post('excuse/updateAjax/(:num)', 'Excuse::updateAjax/$1');
-$routes->get('excuse/approveAjax/(:num)', 'Excuse::approveAjax/$1');
-$routes->get('excuse/denyAjax/(:num)', 'Excuse::denyAjax/$1');
+$routes->get('excuse/approveAjax/(:num)/(:num)', 'Excuse::approveAjax/$1/$2');
+$routes->get('excuse/denyAjax/(:num)/(:num)', 'Excuse::denyAjax/$1/$2');
 
 
-$routes->get('excuse/approvePdfAjax/(:num)', 'Excuse::approvePdfAjax/$1');
+$routes->get('excuse/approvePdfAjax/(:num)/(:num)', 'Excuse::approvePdfAjax/$1/$2');
 $routes->get('excuse/generatePdf/(:num)', 'Excuse::generatePdf/$1');
 $routes->get('excuse/clinicsAjax', 'Excuse::clinicsAjax');
 $routes->get('api/excuse/validateByPrefix', 'PublicExcuseApi::validateByPrefix');
@@ -143,6 +144,14 @@ $routes->options('api/save-fcm-token', 'Api_Controller::save_fcm_token');
 // Push Notifications
 $routes->post('api/send-push-notification', 'Api_Controller::send_push_notification');
 $routes->options('api/send-push-notification', 'Api_Controller::send_push_notification');
+
+// Consolidated API - Endpoint que reemplaza múltiples llamadas individuales
+$routes->get('consolidated_api/get_all_data', 'Consolidated_api::get_all_data');
+$routes->options('consolidated_api/get_all_data', 'Consolidated_api::get_all_data');
+$routes->get('consolidated_api/get_notification_html', 'Consolidated_api::get_notification_html');
+$routes->options('consolidated_api/get_notification_html', 'Consolidated_api::get_notification_html');
+$routes->post('consolidated_api/update_notification_status', 'Consolidated_api::update_notification_status');
+$routes->options('consolidated_api/update_notification_status', 'Consolidated_api::update_notification_status');
 
 $routes->get('firmas/(:any)', function($filename) {
   $path = WRITEPATH . 'firmas/' . $filename;

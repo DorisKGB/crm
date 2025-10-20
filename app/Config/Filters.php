@@ -31,6 +31,15 @@ class Filters extends BaseConfig {
                     'calls_system/check_incoming_calls',
                     'calls_system/check_call_status',
                     'api/save-fcm-token',
+                    'excuse/listAjax',
+                    'excuse/countsAjax',
+                    'excuse/showAjax/*',
+                    'excuse/storeAjax',
+                    'excuse/updateAjax/*',
+                    'excuse/approveAjax/*',
+                    'excuse/denyAjax/*',
+                    'excuse/approvePdfAjax/*',
+                    'excuse/clinicsAjax',
                 ]
             );
 
